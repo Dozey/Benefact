@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://platform.benefact.me/Schema/Settings.xsd" xmlns="http://platform.benefact.me/Schema/Settings.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:expression="http://platform.benefact.me/Schema/Expressions.xsd" elementFormDefault="qualified" version="1.0">
+  <xs:import namespace="http://platform.benefact.me/Schema/Expressions.xsd" />
+  <xs:simpleType name="Scheme">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="http"></xs:enumeration>
+      <xs:enumeration value="https"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SchemeList">
+    <xs:list itemType="Scheme" />
+  </xs:simpleType>
+  <xs:complexType name="Route">
+    <xs:sequence>
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="Match" type="expression:ExpressionSequenceType" />
+    </xs:sequence>
+    <xs:attribute name="Host" type="xs:string" use="required" />
+    <xs:attribute name="Scheme" type="SchemeList" default="http" />
+    <xs:anyAttribute namespace="##other" processContents="strict" />
+  </xs:complexType>
+  <xs:complexType name="Expression">
+    <xs:complexContent>
+      <xs:extension base="expression:ExpressionSequenceType">
+        <xs:attribute name="Name" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Settings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Targets">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Target" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Routes" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Route" type="Route" minOccurs="0" maxOccurs="unbounded" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Expressions" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Expression" type="Expression" minOccurs="0" maxOccurs="unbounded" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="Name" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Platform" use="required" />
+      <xs:attribute name="Version" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

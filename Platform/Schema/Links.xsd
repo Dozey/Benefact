@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://platform.benefact.me/Schema/Links.xsd" xmlns="http://platform.benefact.me/Schema/Links.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:exp="http://platform.benefact.me/Schema/Expressions.xsd" elementFormDefault="qualified" version="1.0">
+  <xs:import namespace="http://platform.benefact.me/Schema/Expressions.xsd" />
+  <xs:complexType name="ExcludeType">
+    <xs:complexContent>
+      <xs:extension base="exp:ExpressionSequenceType" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:attribute name="Exclude">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="none" />
+        <xs:enumeration value="self" />
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="Tag" type="xs:string" />
+  <xs:element name="Exclusions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Exclude" type="ExcludeType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XMLSchema1" targetNamespace="http://platform.benefact.me/Schema/Expressions.xsd" xmlns="http://platform.benefact.me/Schema/Expressions.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   
+  <xs:element name="Any" type="AnyType" />
+  <xs:element name="All" type="AnyType" />
+  <xs:element name="Reference" type="ReferenceType" />
+  <xs:element name="Regex" type="RegexType" />
+  <xs:element name="Compare" type="CompareType" />
+  <xs:element name="Contains" type="ContainsType" />
+  <xs:element name="StartsWith" type="StartsWithType" />
+  <xs:element name="EndsWith" type="EndsWithType" />
+  <xs:element name="FirstIndexOf" type="FirstIndexOfType" />
+  <xs:element name="LastIndexOf" type="LastIndexOfType" />
+  
+  <!--
+  ExpressionSource
+  The source data that the expression will be matched against
+  -->
+  <xs:simpleType name="ExpressionSourceType">
+    <xs:restriction base="xs:string">
+      <!--
+              url - The url being tested
+              host - The hostname fragment of the url being tested
+              path - The path fragment of the url being tested
+              query - The query fragment of the url being tested
+              query:.+ - A named parameter in the query fragment of the url being tested
+              parent - The string returned by the enclosing expression
+              parent:.+ - The strings returned by the enclosing expression (0 = parent)
+              -->
+      <xs:pattern value="url|host|path|query|query:.+|parent|parent:.+" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!--
+  Expression
+  Base type for all expressions
+  -->
+  <xs:complexType name="ExpressionType" abstract="true">
+    <xs:attribute name="Source" type="ExpressionSourceType" default="parent" />
+  </xs:complexType>
+  <!--
+  ExpressionSequence
+  A sequence of expressions
+  -->
+  <xs:complexType name="ExpressionSequenceType">
+    <xs:sequence>
+      <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##targetNamespace" />
+    </xs:sequence>
+  </xs:complexType>
+  <!--
+  Named
+  Reference to a named expression
+  -->
+  <xs:complexType name="ReferenceType">
+    <xs:complexContent>
+      <xs:extension base="ExpressionType">
+        <xs:attribute name="Name" type="xs:string" use="required" />
+        <xs:attribute name="Equals" type="xs:boolean" default="true" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  StringExpression
+  Base type for simple string comparisons
+  -->
+  <xs:complexType name="StringExpressionType" abstract="true">
+    <xs:complexContent>
+      <xs:extension base="ExpressionType">
+        <xs:sequence>
+          <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="Value" type="xs:string" default="" />
+        <xs:attribute name="Equals" type="xs:boolean" default="true" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  Any
+  Tests whether the source matches any expression in the sequence
+  -->
+  <xs:complexType name="AnyType">
+    <xs:complexContent>
+      <xs:extension base="ExpressionType">
+        <xs:sequence>
+          <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##targetNamespace" />
+        </xs:sequence>
+        <xs:attribute name="Equals" type="xs:boolean" default="true" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  All
+  Tests whether the source matches all expressions in the sequence
+  -->
+  <xs:complexType name="AllType">
+    <xs:complexContent>
+      <xs:extension base="ExpressionType">
+        <xs:sequence>
+          <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##targetNamespace" />
+        </xs:sequence>
+        <xs:attribute name="Equals" type="xs:boolean" default="true" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  Match
+  Tests whether the source matches the regular expression
+  -->
+  <xs:complexType name="RegexType">
+    <xs:complexContent>
+      <xs:extension base="ExpressionType">
+        <xs:sequence>
+          <xs:element name="Pattern" type="xs:string" minOccurs="0" maxOccurs="1" />
+          <xs:element name="And" minOccurs="0" maxOccurs="1" type="ExpressionSequenceType" />
+        </xs:sequence>
+        <xs:attribute name="Pattern" type="xs:string" default="" />
+        <xs:attribute name="Equals" type="xs:boolean" default="true" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  Compare
+  Tests whether the source is equal to the value
+  -->
+  <xs:complexType name="CompareType">
+    <xs:complexContent>
+      <xs:extension base="StringExpressionType">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  Contains
+  Tests whether the first part of the source matches the value
+  -->
+  <xs:complexType name="ContainsType">
+    <xs:complexContent>
+      <xs:extension base="StringExpressionType">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  StartsWith
+  Tests whether the first part of the source matches the value
+  -->
+  <xs:complexType name="StartsWithType">
+    <xs:complexContent>
+      <xs:extension base="StringExpressionType">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  EndsWith
+  Tests whether the first part of the source matches the value
+  -->
+  <xs:complexType name="EndsWithType">
+    <xs:complexContent>
+      <xs:extension base="StringExpressionType">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  FirstIndexOf
+  Tests whether the first part of the source matches the value
+  -->
+  <xs:complexType name="FirstIndexOfType">
+    <xs:complexContent>
+      <xs:extension base="StringExpressionType">
+        <xs:attribute name="Index" type="xs:int" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--
+  LastIndexOf
+  Tests whether the first part of the source matches the value
+  -->
+  <xs:complexType name="LastIndexOfType">
+    <xs:complexContent>
+      <xs:extension base="StringExpressionType">
+        <xs:attribute name="Index" type="xs:int" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
