@@ -22,4 +22,5 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:attribute name="RewriteFormat" type="xs:string" />
 </xs:schema>

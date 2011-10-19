@@ -35,6 +35,7 @@
               <xs:element name="Target" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
+                    <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="Routes" minOccurs="1" maxOccurs="1">
                       <xs:complexType>
                         <xs:sequence>
