@@ -43,7 +43,7 @@ package me.benefact.route
 		}
 		
 		protected function evaluateRoute(ctx:ExpressionContext) : Boolean {
-			for each(var expression:XML in ctx.route.child("Match")){
+			for each(var expression:XML in ctx.route.elements("Match")){
 				var result:Boolean = false;
 
 				if(evaluateMatch(expression, ctx))

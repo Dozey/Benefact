@@ -1,0 +1,1 @@
+function(data) { ( window.execScript || function( data ) { window[ "eval" ].call( window, data ); } )( data );}

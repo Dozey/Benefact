@@ -16,23 +16,13 @@ package me.benefact.target
 				throw new Error("Invalid configuration");
 
 			_target = settings["target"];
-			_evaluator = settings["evaluator"];
-			
-			if(_evaluator == null || !(_evaluator is IRouteEvaluator)){
-				_evaluator = new RouteEvaluator(
-					new RouteResolver(_target.Routes),
-					new ExpressionEvaluator(
-						new ExpressionResolver(_target.Expressions)
-					)
-				);
-			}
 		}
 		
 		protected function get target() : XML {
 			return _target;
 		}
 		
-		protected function get evaluator() : IRouteEvaluator {			
+		protected function get evaluator() : IRouteEvaluator {
 			return _evaluator;
 		}
 		
